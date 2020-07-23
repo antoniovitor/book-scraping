@@ -1,4 +1,4 @@
-function bookInfoSpider (link: string) {
+function bookInfoSpider () {
 
 }
 
