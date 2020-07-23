@@ -21,6 +21,7 @@ module.exports = {
   rules: {
     "indent": ["error", 4],
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
     "comma-dangle": ["error", "only-multiline"]
   }
 }

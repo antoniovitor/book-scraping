@@ -1,12 +1,18 @@
 import 'dotenv/config'
 import AddLinksCommand from './cmd/AddLinks'
 import RunSpiderCommand from './cmd/RunSpider'
+import bootstrap from './bootstrap'
 
 interface FunctionCommands {
     [index:string]: (...args:string[]) => void
 }
 
-function main () {
+async function main () {
+    /**
+     * Bootstrap application
+     */
+    await bootstrap()
+
     /**
      * Creates command functions
      */
