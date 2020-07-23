@@ -1,15 +1,15 @@
 import { Document, DocumentSchema } from 'camo'
 
 interface Schema extends DocumentSchema {
-    URL: StringConstructor
-    pdfURL?: StringConstructor
+    URL: string
+    pdfURL?: string
 }
 
 class Link extends Document<Schema> {
     constructor () {
         super()
 
-        this.schema<Schema>({
+        this.schema({
             URL: String,
             pdfURL: String
         })
