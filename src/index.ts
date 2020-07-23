@@ -22,17 +22,16 @@ async function main () {
          *
          * Adds links to database
         */
-        'add-links': (...filesPath) => {
-            AddLinksCommand(filesPath)
+        'add-links': (...filesPaths) => {
+            AddLinksCommand(filesPaths[0])
         },
         /**
          * PHASE 2
          *
          * Start web scraping
          */
-        'run-spider': (...spiderNames) => {
-            const spiderName = spiderNames[0]
-            RunSpiderCommand(spiderName)
+        'run-spider': (...spidersNames) => {
+            RunSpiderCommand(spidersNames[0])
         }
     }
 
