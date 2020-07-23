@@ -2,11 +2,6 @@ import 'dotenv/config'
 import AddLinksCommand from './cmd/AddLinks'
 import RunSpiderCommand from './cmd/RunSpider'
 
-/**
- * This project is intended to download some PDF's online at the same time I
- * learn a little of web scraping
-*/
-
 interface FunctionCommands {
     [index:string]: (...args:string[]) => void
 }
