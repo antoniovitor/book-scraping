@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "",
+    "start": "sucrase-node src/index.ts",
     "watch": "nodemon src/index.ts",
     "build": "sucrase ./src -d ./dist --transforms typescript,imports"
   },
