@@ -3,6 +3,11 @@ import { Document, DocumentSchema } from 'camo'
 interface Schema extends DocumentSchema {
     URL: string
     pdfURL?: string
+    status: 'created'
+        | 'scraped'
+        | 'downloaded'
+        | 'error-scrap'
+        | 'error-download'
 }
 
 class Link extends Document<Schema> {
@@ -11,7 +16,8 @@ class Link extends Document<Schema> {
 
         this.schema({
             URL: String,
-            pdfURL: String
+            pdfURL: String,
+            status: String
         })
     }
 }
