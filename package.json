@@ -20,6 +20,7 @@
   "devDependencies": {
     "@types/bull": "^3.14.0",
     "@types/camo": "^0.12.1",
+    "@types/cheerio": "^0.22.21",
     "@types/nedb": "^1.8.10",
     "@types/puppeteer": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^1.4.2",
