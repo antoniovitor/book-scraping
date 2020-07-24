@@ -1,12 +1,12 @@
 import BookInfoSpider from './bookInfo'
-import Spider from '../module/spider'
+import { SpiderInterface } from '../module/spider'
 
 interface SpiderList {
-    [name: string]: typeof Spider
+    [spiderName: string]: SpiderInterface<any>
 }
 
-const Spiders: SpiderList = {
+const spiders: SpiderList = {
     'book-info': BookInfoSpider
 }
 
-export default Spiders
+export default spiders
