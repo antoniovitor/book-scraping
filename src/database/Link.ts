@@ -23,7 +23,7 @@ class Link extends Document<Schema> {
         | 'downloaded'
         | 'error-scrap'
         | 'error-download'
-    errors: []
+    errors: any[]
 
     constructor () {
         super()

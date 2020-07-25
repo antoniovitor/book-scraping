@@ -15,7 +15,8 @@
     "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.2.0",
     "nedb": "^1.8.0",
-    "puppeteer": "^5.1.0"
+    "puppeteer": "^5.1.0",
+    "serialize-error": "^7.0.1"
   },
   "devDependencies": {
     "@types/bull": "^3.14.0",

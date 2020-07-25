@@ -3,12 +3,13 @@ import Link from '../database/Link'
 import axios from 'axios'
 import cheerio from 'cheerio'
 import fs from 'fs'
+import { serializeError } from 'serialize-error'
 
 const BookInfoSpider: SpiderInterface<Link> = {
     maxParallel: 2,
 
-    data: async () => {
-        return (await Link.find<Link>({})).slice(0, 1)
+    data: () => {
+        return Link.find<Link>({})
     },
 
     execute: async (link) => {
@@ -16,7 +17,7 @@ const BookInfoSpider: SpiderInterface<Link> = {
         const response = await axios.get(link.URL.toString())
         const scraper = cheerio.load(response.data)
 
-        let errors: [] = []
+        let errors: any[] = []
 
         /**
          * Extracts PDF's link
@@ -40,14 +41,41 @@ const BookInfoSpider: SpiderInterface<Link> = {
          */
         link.bookName = scraper('div.page-title > h1').text()
 
-        link.errors = errors
+        if (errors.length > 0) {
+            link.errors = errors
+            link.status = 'error-scrap'
 
+            /**
+             * Saves and log errors
+             */
+            fs.appendFile('./src/tmp/detected-errors',
+                `****************************\n` +
+                `An error has occurred in link: ${link.URL}\n` +
+                `_id: ${link._id}\n` +
+                `Error: ${JSON.stringify(errors)}\n` +
+                `****************************\n\n`
+                , console.error)
+        } else {
+            link.status = 'scraped'
+        }
+
+        /**
+         * Saves new data to DB
+         */
         link.save()
     },
 
     catchError: (err, link) => {
-        console.log(`An error has occured in link: ${link.URL}`)
+        console.error(`An error has occurred in link: ${link.URL}`)
         console.error(err)
+        fs.appendFile('./src/tmp/undetected-errors', `
+            ****************************
+            An error has occurred in link: ${link.URL}
+            _id: ${link._id}
+            Error: ${JSON.stringify(serializeError(err))}
+            ****************************
+
+        `, console.error)
     }
 }
 
