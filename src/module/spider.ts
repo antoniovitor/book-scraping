@@ -2,7 +2,7 @@ export interface SpiderInterface<DataType = any> {
     /**
      * Keeps the collection of items each to be executed for `execute` function
      */
-    data: [] | (() => Promise<DataType[]>)
+    data: DataType[] | (() => Promise<DataType[]>)
     /**
      * Execute scraping for each data item
      */
@@ -11,6 +11,10 @@ export interface SpiderInterface<DataType = any> {
      * Max parallel execution
      */
     maxParallel?: number
+    /**
+     * Catch error function
+     */
+    catchError?: (err: Error, item: DataType) => void
 }
 
 class SpiderHandler {
@@ -27,28 +31,32 @@ class SpiderHandler {
 
         if (spider.maxParallel) {
             for (let i = 0; i < spider.maxParallel; i++) {
-                console.log('Worker:', i)
                 this.executeNextQueued()
             }
         } else {
+            this.queue.forEach(link => {
+                this.spider.execute(link)
+            })
         }
     }
 
     getData = () => {
-        const { data } = this.spider
+        const { spider } = this
 
-        if (typeof data === 'function') {
-            return data()
+        if (typeof spider.data === 'function') {
+            return spider.data()
         }
 
-        return data
+        return spider.data
     }
 
     executeNextQueued = () => {
         const nextScraping = this.queue.shift()
 
         if (nextScraping) {
-            return this.spider.execute(nextScraping).catch().then(() => {
+            return this.spider.execute(nextScraping).catch((err) => {
+                this.spider.catchError(err, nextScraping)
+            }).then(() => {
                 this.executeNextQueued()
             })
         }
