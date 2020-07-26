@@ -2,6 +2,7 @@ import 'dotenv/config'
 import AddLinksCommand from './cmd/AddLinks'
 import RunSpiderCommand from './cmd/RunSpider'
 import bootstrap from './bootstrap'
+import DownloadPDFs from './cmd/DownloadPDFs'
 
 interface FunctionCommands {
     [index:string]: (...args:string[]) => void
@@ -32,6 +33,14 @@ async function main () {
          */
         'run-spider': (...spidersNames) => {
             RunSpiderCommand(spidersNames[0])
+        },
+        /**
+         * PHASE 3
+         *
+         * Download PDF's
+         */
+        'download': () => {
+            DownloadPDFs()
         }
     }
 
