@@ -5,11 +5,15 @@ import cheerio from 'cheerio'
 import fs from 'fs'
 import { serializeError } from 'serialize-error'
 
+/**
+ * Extracts data about books.
+ */
 const BookInfoSpider: SpiderInterface<Link> = {
-    maxParallel: 2,
+    maxParallel: 6,
 
-    data: () => {
-        return Link.find<Link>({})
+    data: async () => {
+        const links = await Link.find<Link>({})
+        return links
     },
 
     execute: async (link) => {
@@ -22,11 +26,20 @@ const BookInfoSpider: SpiderInterface<Link> = {
         /**
          * Extracts PDF's link
          */
-        const relativePdfURL = scraper('.test-bookpdf-link').attr('href')
-        if (relativePdfURL) {
-            link.pdfURL = `http://link.springer.com${relativePdfURL}`
+        const relativePdfURLs = scraper(`a[data-track-action='Book download - pdf']`).attr('href')
+
+        if (relativePdfURLs) {
+            link.pdf = `http://link.springer.com${relativePdfURLs}`
         } else {
             errors.push('pdf-link-not-found')
+        }
+        /**
+         * Extracts EPUB's link
+         */
+        const relativeEpubURLs = scraper(`a[data-track-action='Book download - ePub']`).attr('href')
+
+        if (relativeEpubURLs) {
+            link.epub = `http://link.springer.com${relativeEpubURLs}`
         }
 
         /**
@@ -48,13 +61,13 @@ const BookInfoSpider: SpiderInterface<Link> = {
             /**
              * Saves and log errors
              */
-            fs.appendFile('./src/tmp/detected-errors',
+            fs.appendFile('./src/tmp/detected-errors.log',
                 `****************************\n` +
                 `An error has occurred in link: ${link.URL}\n` +
                 `_id: ${link._id}\n` +
                 `Error: ${JSON.stringify(errors)}\n` +
                 `****************************\n\n`
-                , console.error)
+                , () => {})
         } else {
             link.status = 'scraped'
         }
@@ -68,14 +81,16 @@ const BookInfoSpider: SpiderInterface<Link> = {
     catchError: (err, link) => {
         console.error(`An error has occurred in link: ${link.URL}`)
         console.error(err)
-        fs.appendFile('./src/tmp/undetected-errors', `
+
+        const { code, message, name } = serializeError(err)
+        fs.appendFile('./src/tmp/undetected-errors.log', `
             ****************************
             An error has occurred in link: ${link.URL}
             _id: ${link._id}
-            Error: ${JSON.stringify(serializeError(err))}
+            Error: ${JSON.stringify({ name, code, message })}
             ****************************
 
-        `, console.error)
+        `, () => {})
     }
 }
 

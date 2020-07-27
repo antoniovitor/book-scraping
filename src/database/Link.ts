@@ -2,20 +2,24 @@ import { Document, DocumentSchema } from 'camo'
 
 interface Schema extends DocumentSchema {
     URL: string
-    pdfURL?: string
+    pdf?: string
+    pdfDownloaded?: boolean
+    epub?: string
+    epubDownloaded?: string
     authors?: string
     bookName?: string
     status: 'created'
         | 'scraped'
-        | 'downloaded'
         | 'error-scrap'
-        | 'error-download'
     errors: []
 }
 
 class Link extends Document<Schema> {
     URL: string
-    pdfURL?: string
+    pdf?: string
+    pdfDownloaded?: boolean
+    epub?: string
+    epubDownloaded?: string
     authors?: string
     bookName?: string
     status: 'created'
@@ -30,7 +34,10 @@ class Link extends Document<Schema> {
 
         this.schema({
             URL: String,
-            pdfURL: String,
+            pdf: String,
+            pdfDownloaded: Boolean,
+            epub: String,
+            epubDownloaded: Boolean,
             status: String,
             authors: String,
             bookName: String,
