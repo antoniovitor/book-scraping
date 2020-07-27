@@ -19,7 +19,7 @@ class Link extends Document<Schema> {
     pdf?: string
     pdfDownloaded?: boolean
     epub?: string
-    epubDownloaded?: string
+    epubDownloaded?: boolean
     authors?: string
     bookName?: string
     status: 'created'
