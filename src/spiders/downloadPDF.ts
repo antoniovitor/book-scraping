@@ -13,12 +13,12 @@ const DownloadPDFSpider: SpiderInterface<Link> = {
     maxParallel: 6,
 
     data: async () => {
-        const links = await Link.find<Link>({ status: 'downloaded' })
+        const links = await Link.find<Link>({ status: 'scraped' })
         return links.filter(link => link.pdf)
     },
 
     execute: async (link) => {
-        console.log(`Downloading book ${link.bookName}`)
+        console.log(`[START] ${link.bookName}`)
 
         const response = await axios.get(link.pdf, {
             headers: {
@@ -30,15 +30,15 @@ const DownloadPDFSpider: SpiderInterface<Link> = {
         if (response.headers['content-type'] === 'application/pdf') {
             const buffer = Buffer.from(new Uint8Array(response.data))
 
-            const filename = sanitizeFilename(`${link.authors}. ${link.bookName}.pdf`)
+            const filename = sanitizeFilename(`[${link._id}] ${link.authors}. ${link.bookName}.pdf`)
 
-            fs.writeFileSync(`./books/${filename}`, buffer, { encoding: 'binary' })
+            fs.writeFileSync(`./books/pdf/${filename}`, buffer, { encoding: 'binary' })
 
             link.pdfDownloaded = true
             link.status = 'downloaded'
             link.save()
 
-            console.log(`Book ${link.bookName} saved.`)
+            console.log(`[END] ${link.bookName} saved.`)
         } else {
             console.error('Cookies expired')
         }
