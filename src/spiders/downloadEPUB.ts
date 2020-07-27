@@ -2,9 +2,9 @@ import { SpiderInterface } from '../module/spider'
 import Link from '../database/Link'
 import axios from 'axios'
 import fs from 'fs'
-import { serializeError } from 'serialize-error'
 import sanitizeFilename from 'sanitize-filename'
 import cookiesConfig from '../config/cookies'
+import Log from '../module/log'
 
 /**
  * Extracts data about books
@@ -48,15 +48,7 @@ const DownloadEPUBSpider: SpiderInterface<Link> = {
         console.error(`An error has occurred in link: ${link.URL}`)
         console.error(err)
 
-        const { code, message, name } = serializeError(err)
-        fs.appendFile('./src/tmp/undetected-errors.log', `
-            ****************************
-            An error has occurred in link: ${link.URL}
-            _id: ${link._id}
-            Error: ${JSON.stringify({ name, code, message })}
-            ****************************
-
-        `, () => {})
+        Log.error(err, 'undetected', { link })
     }
 }
 
