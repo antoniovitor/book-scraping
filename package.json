@@ -1,0 +1,43 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "sucrase-node src/index.ts",
+    "watch": "nodemon src/index.ts",
+    "build": "sucrase ./src -d ./dist --transforms typescript,imports"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bull": "^3.16.0",
+    "camo": "^0.12.3",
+    "cheerio": "^1.0.0-rc.3",
+    "dotenv": "^8.2.0",
+    "nedb": "^1.8.0",
+    "puppeteer": "^5.1.0",
+    "sanitize-filename": "^1.6.3",
+    "serialize-error": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/bull": "^3.14.0",
+    "@types/camo": "^0.12.1",
+    "@types/cheerio": "^0.22.21",
+    "@types/nedb": "^1.8.10",
+    "@types/puppeteer": "^3.0.1",
+    "@typescript-eslint/eslint-plugin": "^1.4.2",
+    "@typescript-eslint/parser": "^1.4.2",
+    "eslint": "^5.15.3",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "nodemon": "^1.18.10",
+    "prettier": "^1.16.4",
+    "sucrase": "^3.10.0",
+    "typescript": "^3.3.3333"
+  }
+}
