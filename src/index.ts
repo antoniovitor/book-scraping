@@ -1,5 +1,7 @@
 import 'dotenv/config'
 import bootstrap from './bootstrap'
+import AddCoursesCommand from './cmd/AddCourses'
+import RunSpiderCommand from './cmd/RunSpider'
 
 interface FunctionCommands {
     [index:string]: (...args:string[]) => void
@@ -15,8 +17,11 @@ async function main () {
      * Creates command functions
      */
     const commands: FunctionCommands = {
-        'get-courses': () => {
-            // Insert command here
+        'add-courses': (...args) => {
+            AddCoursesCommand(args[0])
+        },
+        'run-spider': (...args) => {
+            RunSpiderCommand(args[0])
         },
     }
 
